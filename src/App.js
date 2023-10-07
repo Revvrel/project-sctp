@@ -1,12 +1,14 @@
 import './App.css';
 import React from "react";
-import QRCode from "react-qr-code";
+// import QRCode from "react-qr-code";
+import Register from './components/Register';
 
 function App() {
 
   return (
-    <div className="App">
-      <QRCode value = "test" />
+    <div>
+      {/* <QRCode value = "test" /> */}
+      <Register />
     </div>
   );
 }
