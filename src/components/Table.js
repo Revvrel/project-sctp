@@ -10,19 +10,19 @@ function Table({ list }) {
             <th>ID</th>
             <th>Student Name</th>
             <th>Current Status</th>
-            <th>Checkin Time</th>
-            <th>CheckOut Time</th>
+            <th>Last Update time</th>
+            {/* <th>CheckOut Time</th> */}
           </tr>
         </thead>
         <tbody>
           {list &&
             list.map((item) => (
               <tr key={item.id}>
-                <td>{item.userid}</td>
+                <td>{item.userId}</td>
                 <td>{item.studentName}</td>
                 <td>{item.status}</td>
                 <td>{item.checkInTime}</td>
-                <td>{item.checkOutTime}</td>
+                {/* <td>{item.checkOutTime}</td> */}
               </tr>
             ))}
         </tbody>
