@@ -1,11 +1,15 @@
 import React, { useState } from 'react';
+
+import { useNavigate } from 'react-router-dom';
 //import mockAPI from "../api/mockapi";
 
 
-function Login() {
+function LoginPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [message, setMessage] = useState('');
+  
+  const navigate = useNavigate();
 
   const handleLogin = () => {
 
@@ -18,6 +22,16 @@ function Login() {
         const user = data.find(user => user.loginEmail === email && user.loginPassword === password);
         if (user) {
           setMessage(`Login successful as ${user.loginType}: ${user.parentName}`);
+          if (user.loginType === 'Parent')
+          {
+            // Redirect to Parent Page
+            navigate('/Parent');
+          }
+          else if (user.loginType === 'Teacher')
+          {
+            //Redirect to Teacher Page
+            navigate('/Teacher');
+          }
         } else {
           setMessage('Invalid email or password. Please try again.');
         }
@@ -62,4 +76,4 @@ function Login() {
   );
 }
 
-export default Login;
+export default LoginPage;

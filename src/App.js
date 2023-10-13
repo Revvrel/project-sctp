@@ -2,6 +2,7 @@ import "./App.css";
 import { useState, useEffect } from "react";
 import React from "react";
 import Register from "./components/Register";
+import LoginPage from "./components/LoginPage";
 // import Parent from "./components/Parent";
 import mockAPI from "./api/mockapi";
 import Table from "./components/Table";
@@ -42,6 +43,7 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Login />} />
+        <Route path="login" element={<LoginPage />} />
         <Route path="parent/:id" element={<Parent />} />
         <Route path="register" element={<Register handlerAddItem={apiPost} />} />
       </Routes>
@@ -54,7 +56,8 @@ function Login() {
     <div>
       <h1>Login Page</h1>
       <nav>
-        <Link to="/">Login Fail</Link> |{" "}
+        <Link to="/">Home</Link> |{" "}
+        <Link to="login">Login</Link> |{" "}
         <Link to="parent/1">Login Success</Link>|{" "}
         <Link to="register">Create account/Register</Link>
       </nav>
