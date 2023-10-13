@@ -67,7 +67,7 @@ function LoginPage() {
         />
       </div>
       <button onClick={handleLogin}>Login</button>
-      <p>{message}</p>
+      <p style={{color: 'red'} }>{message}</p>
     </div>  
           
 
