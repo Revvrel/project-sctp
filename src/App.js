@@ -3,37 +3,52 @@ import { useState, useEffect } from "react";
 import React from "react";
 // import QRCode from "react-qr-code";
 import Register from "./components/Register";
-import Parent from "./components/Parent";
+// import Parent from "./components/Parent";
 import mockAPI from "./api/mockapi";
 import Table from "./components/Table";
+import {
+  useParams,
+  Link,
+  BrowserRouter,
+  Routes,
+  Route,
+} from "react-router-dom";
 
 //test
 
 function App() {
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Login />} />
+        <Route path="parent/:id" element={<Parent />} />
+        <Route path="register" element={<Register />} />
+      </Routes>
+    </BrowserRouter>
+  );
+}
+
+function Login() {
+  return (
+    <div>
+      <h1>Login Page</h1>
+      <nav>
+        <Link to="/">Login Fail</Link> |{" "}
+        <Link to="parent/1">Login Success</Link>|{" "}
+        <Link to="register">Create account/Register</Link>
+      </nav>
+    </div>
+  );
+}
+
+function Parent() {
+  const { id } = useParams();
   const [status, setStatus] = useState([]);
-  const [isToggled, setIsToggled] = useState(false);
-
-  const toggleStatus = async () => {
-    try {
-      const currentStatus = status.status;
-      const newStatus = currentStatus === "Check In" ? "Check Out" : "Check In";
-
-      const response = await mockAPI.put(`/users/1/attendance/1`, {
-        ...status,
-        status: newStatus,
-      });
-
-      setStatus(response.data);
-      setIsToggled((prevIsToggled) => !prevIsToggled); // Toggle the state
-    } catch (error) {
-      console.error("Error updating status:", error.message);
-    }
-  };
 
   const apiGet = async () => {
     console.log("Test");
     try {
-      const response = await mockAPI.get(`/users/1/attendance`);
+      const response = await mockAPI.get(`/users/${id}/attendance`);
       setStatus(response.data);
       console.log(response.data);
     } catch (error) {
@@ -41,20 +56,40 @@ function App() {
     }
   };
 
+  const toggleStatus = async () => {
+    console.log("Test");
+    try {
+      const newStatus =
+        status[0].status === "Check In" ? "Check Out" : "Check In";
+      console.log("log now", status[0].status);
+      console.log("log new", newStatus);
+
+      const newTime = new Date().toLocaleString();
+      console.log("log new time", newTime);
+      const response = await mockAPI.put(`/users/1/attendance/${id}`, {
+        status: newStatus,
+        checkInTime: newTime,
+      });
+      setStatus([response.data]);
+    } catch (error) {}
+  };
+
   useEffect(() => {
     apiGet();
+    console.log("useEffect");
   }, []);
+
+  console.log("Data1:");
 
   return (
     <div>
       {/* <QRCode value = "test" /> */}
       <Register />
       {/* <Parent /> */}
-      <h1>Parents Page</h1>
-      <p>Status: {status.status}</p>
-      <button onClick={toggleStatus}>Checkin/Checkout</button>
-      <button onClick={apiGet}>Refresh</button>
+      <h1>Hello Parent!</h1>
+      <p>Find out and manage your child checkin status here </p>
       {status && <Table list={status} />}
+      <button onClick={toggleStatus}>Checkin/Checkout</button>
     </div>
   );
 }
