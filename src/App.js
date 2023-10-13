@@ -1,9 +1,7 @@
 import "./App.css";
 import { useState, useEffect } from "react";
 import React from "react";
-// import QRCode from "react-qr-code";
 import Register from "./components/Register";
-// import Register2 from "./components/Register2"
 // import Parent from "./components/Parent";
 import mockAPI from "./api/mockapi";
 import Table from "./components/Table";
@@ -18,12 +16,34 @@ import {
 //test
 
 function App() {
+  const [users, setUsers] = useState([]);
+
+  const apiGet = async () => {
+    try {
+      const response = await mockAPI.get(`/users/`);
+      console.log(response.data);
+      setUsers(response.data);    
+    } catch (error) {
+      console.log(error.message);
+    }
+  }
+
+  const apiPost = async (newUser) => {
+    try {
+      const response = await mockAPI.post(`/users`, newUser)
+      console.log(response.data);
+      apiGet();
+    } catch(error) {
+      console.log(error.message);
+    };
+  }
+
   return (
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Login />} />
         <Route path="parent/:id" element={<Parent />} />
-        <Route path="register" element={<Register />} />
+        <Route path="register" element={<Register handlerAddItem={apiPost} />} />
       </Routes>
     </BrowserRouter>
   );

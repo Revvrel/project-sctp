@@ -6,16 +6,16 @@ import { useState } from "react";
 import styles from "./Register.module.css";
 
 const schema = {
-  parentName: Joi.string().min(3).max(40).required(),
-  parentIC: Joi.string().min(9).max(9).required(),
-  phoneNumber: Joi.number().min(8).max(20).required(),
-  studentName: Joi.string().min(3).max(40).required(),
-  studentIC: Joi.string().min(9).max(9).required(),
+  parentName: Joi.string().required(),
+  parentIC: Joi.string().required(),
+  phoneNumber: Joi.number().required(),
+  studentName: Joi.string().required(),
+  studentIC: Joi.string().required(),
   loginEmail: Joi.string().email().required(),
   loginPassword: Joi.string().min(6).max(20).required(),
 };
 
-function Register() {
+function Register({handlerAddItem}) {
   const [error, setError] = useState([]);
   const [user, setUser] = useState({
     parentName: "",
@@ -24,8 +24,7 @@ function Register() {
     studentName: "",
     studentIC: "",
     loginEmail: "",
-    loginPassword: "",
-    repeatPassword: "",
+    loginPassword: ""
   });
 
   const handlerOnChange = (event) => {
@@ -60,8 +59,9 @@ function Register() {
     return error ? error.details[0].message : null;
   };
 
-  const handlerOnSubmit = (event) => {
+  const handlerSubmit = (event) => {
     event.preventDefault();
+    handlerAddItem(user);
     const result = Joi.validate(user, schema, { abortEarly: false });
     const { error } = result;
     if (!error) {
@@ -82,7 +82,7 @@ function Register() {
   return (
     <div className={styles.container}>
       <h2>Register Page</h2>
-      <form onSubmit={handlerOnSubmit}>
+      <form onSubmit={handlerSubmit}>
 
         <label>Parent Name</label>
         <input
@@ -155,7 +155,6 @@ function Register() {
         {error.loginPassword && <p className="error">{error.loginPassword}</p>}
 
         <button>Submit</button>
-        <button>Reset</button>
       </form>
     </div>
   );
