@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import React from "react";
 // import QRCode from "react-qr-code";
 import Register from "./components/Register";
+// import Register2 from "./components/Register2"
 // import Parent from "./components/Parent";
 import mockAPI from "./api/mockapi";
 import Table from "./components/Table";
@@ -84,7 +85,7 @@ function Parent() {
   return (
     <div>
       {/* <QRCode value = "test" /> */}
-      <Register />
+      {/* <Register /> */}
       {/* <Parent /> */}
       <h1>Hello Parent!</h1>
       <p>Find out and manage your child checkin status here </p>
