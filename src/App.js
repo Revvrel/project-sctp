@@ -1,14 +1,15 @@
 import "./App.css";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import React from "react";
+
 import Register from "./components/Register";
-import LoginPage from "./components/LoginPage";
-// import Parent from "./components/Parent";
+import Login from "./components/Login";
+import Teacher from "./components/Teacher";
+import Parent from "./components/Parent";
+
 import mockAPI from "./api/mockapi";
-import Table from "./components/Table";
+
 import {
-  useParams,
-  Link,
   BrowserRouter,
   Routes,
   Route,
@@ -23,98 +24,42 @@ function App() {
     try {
       const response = await mockAPI.get(`/users/`);
       console.log(response.data);
-      setUsers(response.data);    
+      setUsers(response.data);
     } catch (error) {
       console.log(error.message);
     }
-  }
+  };
 
   const apiPost = async (newUser) => {
+    const userAttendance = {
+      parentName: newUser.parentName,
+      studentName: newUser.studentName,
+      status: "Check In",
+      checkInTime: "",
+      userId: newUser.id,
+    };
     try {
-      const response = await mockAPI.post(`/users`, newUser)
+      const response = await mockAPI.post(`/users`, newUser);
       console.log(response.data);
       apiGet();
-    } catch(error) {
+      console.log("This is user ID: ", newUser.id);
+      console.log("This is attendance ID:" , newUser.userId);
+      const response2 = await mockAPI.post(`/users/1/attendance`,userAttendance);
+    } catch (error) {
       console.log(error.message);
-    };
-  }
+    }
+  };
 
   return (
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Login />} />
-        <Route path="login" element={<LoginPage />} />
         <Route path="parent/:id" element={<Parent />} />
+        <Route path="teacher/:id" element={<Teacher />} />
+        {/* <Route path="register" element={<Register />} /> */}
         <Route path="register" element={<Register handlerAddItem={apiPost} />} />
       </Routes>
     </BrowserRouter>
-  );
-}
-
-function Login() {
-  return (
-    <div>
-      <h1>Login Page</h1>
-      <nav>
-        <Link to="/">Home</Link> |{" "}
-        <Link to="login">Login</Link> |{" "}
-        <Link to="parent/1">Login Success</Link>|{" "}
-        <Link to="register">Create account/Register</Link>
-      </nav>
-    </div>
-  );
-}
-
-function Parent() {
-  const { id } = useParams();
-  const [status, setStatus] = useState([]);
-
-  const apiGet = async () => {
-    console.log("Test");
-    try {
-      const response = await mockAPI.get(`/users/${id}/attendance`);
-      setStatus(response.data);
-      console.log(response.data);
-    } catch (error) {
-      console.log(error.message);
-    }
-  };
-
-  const toggleStatus = async () => {
-    console.log("Test");
-    try {
-      const newStatus =
-        status[0].status === "Check In" ? "Check Out" : "Check In";
-      console.log("log now", status[0].status);
-      console.log("log new", newStatus);
-
-      const newTime = new Date().toLocaleString();
-      console.log("log new time", newTime);
-      const response = await mockAPI.put(`/users/1/attendance/${id}`, {
-        status: newStatus,
-        checkInTime: newTime,
-      });
-      setStatus([response.data]);
-    } catch (error) {}
-  };
-
-  useEffect(() => {
-    apiGet();
-    console.log("useEffect");
-  }, []);
-
-  console.log("Data1:");
-
-  return (
-    <div>
-      {/* <QRCode value = "test" /> */}
-      {/* <Register /> */}
-      {/* <Parent /> */}
-      <h1>Hello Parent!</h1>
-      <p>Find out and manage your child checkin status here </p>
-      {status && <Table list={status} />}
-      <button onClick={toggleStatus}>Checkin/Checkout</button>
-    </div>
   );
 }
 

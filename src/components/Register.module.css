@@ -1,6 +1,6 @@
 .container {
     width: 300px;
-    margin: 0 auto;
+    margin: auto;
   }
   form {
     display: grid;
@@ -13,3 +13,5 @@
     margin: 2rem 0;
     padding: 0.5rem;
   }
+
+  

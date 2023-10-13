@@ -2,20 +2,23 @@ import mockAPI from "../api/mockapi";
 
 import Joi from "joi-browser";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 import styles from "./Register.module.css";
 
 const schema = {
-  parentName: Joi.string().required(),
-  parentIC: Joi.string().required(),
+  parentName: Joi.string().min(3).max(30).required(),
+  parentIC: Joi.string().min(6).max(9).required(),
   phoneNumber: Joi.number().required(),
-  studentName: Joi.string().required(),
-  studentIC: Joi.string().required(),
+  studentName: Joi.string().min(3).max(30).required(),
+  studentIC: Joi.string().min(6).max(8).required(),
   loginEmail: Joi.string().email().required(),
   loginPassword: Joi.string().min(6).max(20).required(),
 };
 
 function Register({handlerAddItem}) {
+  const navigate = useNavigate();
+
   const [error, setError] = useState([]);
   const [user, setUser] = useState({
     parentName: "",
@@ -24,7 +27,8 @@ function Register({handlerAddItem}) {
     studentName: "",
     studentIC: "",
     loginEmail: "",
-    loginPassword: ""
+    loginPassword: "",
+    loginType: "Parent"
   });
 
   const handlerOnChange = (event) => {
@@ -63,6 +67,19 @@ function Register({handlerAddItem}) {
     event.preventDefault();
     handlerAddItem(user);
     const result = Joi.validate(user, schema, { abortEarly: false });
+
+    setUser({
+      parentName: "",
+      parentIC: "",
+      phoneNumber: "",
+      studentName: "",
+      studentIC: "",
+      loginEmail: "",
+      loginPassword: "",
+    })
+
+    navigate(`/`);
+
     const { error } = result;
     if (!error) {
       console.log(user);
@@ -154,7 +171,7 @@ function Register({handlerAddItem}) {
         />
         {error.loginPassword && <p className="error">{error.loginPassword}</p>}
 
-        <button>Submit</button>
+        <button onClick={handlerAddItem}>Submit</button>
       </form>
     </div>
   );

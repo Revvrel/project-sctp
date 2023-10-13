@@ -18,7 +18,7 @@ function Table({ list }) {
           {list &&
             list.map((item) => (
               <tr key={item.id}>
-                <td>{item.userId}</td>
+                <td>{item.id}</td>
                 <td>{item.studentName}</td>
                 <td>{item.status}</td>
                 <td>{item.checkInTime}</td>
